@@ -1,5 +1,7 @@
 class VM
-  attr_reader :id, :cpu, :ram, :hdd_type, :hdd_capacity, :add_hdd
+  attr_reader :id, :cpu, :ram, :hdd_type, :hdd_capacity, :addit_hdd, :cost
+  attr_writer :cost
+
   def initialize(vm_conf, vol_confs = [])
     @id           = vm_conf[0]
     @cpu          = vm_conf[1]
@@ -7,6 +9,7 @@ class VM
     @hdd_type     = vm_conf[3]
     @hdd_capacity = vm_conf[4]
     @addit_hdd    = vol_confs
+    @cost         = nil
   end
 
   # Классовый метод который возвращает массив инстансов вычислительных машин
@@ -26,7 +29,7 @@ class VM
                 vol_conf_vm_id  = vol_conf[0]
                 vol_conf_vm_id == vm_id
               end
-              
+
     # Убираем из конфигураций hdd айдишник VM которому принадлежит hdd
     hdd_arr.map do |hdd|
         hdd = [hdd[1], hdd[2]]
