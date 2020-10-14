@@ -32,10 +32,10 @@ class CostManager
 
   def find_price(incoming_price_name)
     found_price = @prices.select do |price|
-                    price_name = price[0]
+                    price_name = price.select { |parametr| parametr.class == String }[0]
                     price_name == incoming_price_name
                   end
-    
+
     # Во втором элементе массива ожидаем стоимость. В первом лежит имя товара
     found_price[0][1]
   end
