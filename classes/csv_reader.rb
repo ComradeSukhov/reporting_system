@@ -3,10 +3,12 @@ class CsvReader
 
   def initialize(csv_file_name)
     # Создаем переменную с путем до CSV файла
-    csv_file_dir = "csv_db/#{csv_file_name}"
+    @csv_file_dir = "csv_db/#{csv_file_name}"
+  end
 
-    # CSV.open возвращает 2-мерный массив
-    csv = CSV.open(csv_file_dir)
+  # CSV.open возвращает 2-мерный массив
+  def read
+    csv = CSV.open(@csv_file_dir)
     csv.map { |arr| reveal_integers(arr) }
   end
 
