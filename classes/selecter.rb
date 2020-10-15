@@ -1,5 +1,6 @@
 class Selecter
-  def initialize(vm_arr)
+  attr_accessor :@vm_arr
+  def initialize(vm_arr = [])
     @vm_arr = vm_arr
   end
 
@@ -13,20 +14,7 @@ class Selecter
 
   def most_voluminous_by_type(quantity = 1, type)
     @vm_arr.max_by(quantity) do |vm|
-      volum = 0
-
-      # Добавляем объем основного hdd VM если условие true
-      volum += vm.hdd_capacity if vm.hdd_type == type
-
-      # Добавляем объем дополнительных hdd VM если условие true
-      vm.addit_hdd.each do |hdd|
-        hdd_type     = hdd.select { |parametr| parametr.class == String }[0]
-        hdd_capacity = hdd.select { |parametr| parametr.class == Integer }[0]
-
-        volum += hdd_capacity if hdd_type == type
-      end
-
-      volum
+      culc_vol_by_type(vm, type)
     end
   end
 
@@ -68,4 +56,19 @@ class Selecter
     end
   end
 
+  def culc_vol_by_type(vm, type)
+    volum = 0
+
+    # Добавляем объем основного hdd VM если условие true
+    volum += vm.hdd_capacity if vm.hdd_type == type
+
+    # Добавляем объем дополнительных hdd VM если условие true
+    vm.addit_hdd.each do |hdd|
+      hdd_type     = hdd.select { |parametr| parametr.class == String }[0]
+      hdd_capacity = hdd.select { |parametr| parametr.class == Integer }[0]
+
+      volum += hdd_capacity if hdd_type == type
+    end
+    volum
+  end
 end
