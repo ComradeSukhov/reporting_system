@@ -7,7 +7,7 @@ class Reporter
   def most_expensive_report
     header
     puts "#{@data.size} самых дорогих ВМ"
-    space_x_3
+    space_x_2
     @data.each do |vm|
       vm_main_report(vm)
     end
@@ -16,7 +16,7 @@ class Reporter
   def cheapest_report
     header
     puts "#{@data.size} самых дешевых ВМ"
-    space_x_3
+    space_x_2
     @data.each do |vm|
       vm_main_report(vm)
     end
@@ -24,12 +24,12 @@ class Reporter
 
   def most_voluminous_by_type_report(type)
     header
-    puts "#{@data.size} самых объемных ВМ по параметру #{type} ВМ"
-    space_x_3
+    puts "#{@data.size} самых объемных ВМ по параметру #{type}"
+    space_x_2
     @data.each do |vm|
       volum = Selecter.new
-      volum.culc_vol_by_type(vm, type)
-      puts "Объем дисков #{type} ВМ = #{volum}"
+      volum = volum.culc_vol_by_type(vm, type)
+      puts "                     Объем дисков #{type} ВМ : #{volum}"
       vm_main_report(vm)
     end
   end
@@ -38,7 +38,7 @@ class Reporter
     header
     puts "#{@data.size} ВМ у которых подключено больше всего дополнительных дисков по количеству"
     puts "с учетом типа диска если параметр hdd_type указан"
-    space_x_3
+    space_x_2
     @data.each do |vm|
       puts "Количество дисков ВМ = #{vm.addit_hdd.size}"
       puts "\n\r"
@@ -50,7 +50,7 @@ class Reporter
     header
     puts "#{@data.size} ВМ у которых подключено больше всего дополнительных дисков по объему"
     puts "с учетом типа диска если параметр hdd_type указан"
-    space_x_3
+    space_x_2
     @data.each do |vm|
       vm_main_report(vm)
     end
@@ -59,17 +59,26 @@ class Reporter
   private
 
   def vm_main_report(vm)
-    puts "Стоимость ВМ: #{vm.cost}"
-      puts "Идентификатор ВМ: #{vm.id}"
-      puts "Количество CPU в ВМ в штуках:               #{vm.cpu}"
-      puts "Количество оперативной памяти в гигабайтах: #{vm.ram}"
-      puts "Тип жесткого диска:                         #{vm.hdd_type}"
-      puts "Объем жесткого диска:                       #{vm.hdd_capacity}"
-      puts "\n\r"
-      puts "\n\r"
-      puts "-------------------------------------------"
-      puts "\n\r"
-      puts "\n\r"
+    puts "                     Стоимость ВМ в рублях: #{vm.cost}"
+    puts "                          Идентификатор ВМ: #{vm.id}"
+    puts "              Количество CPU в ВМ в штуках: #{vm.cpu}"
+    puts "Количество оперативной памяти в гигабайтах: #{vm.ram}"
+    puts "                        Тип жесткого диска: #{vm.hdd_type}"
+    puts "                      Объем жесткого диска: #{vm.hdd_capacity}"
+    puts "___________________________________________"
+    puts "Дополнительные жесткие диски:"
+    vm.addit_hdd.each_with_index do |hdd, index|
+      hdd_type     = hdd[:hdd_type]
+      hdd_capacity = hdd[:hdd_capacity]
+      puts "Диск № #{index+1}"
+      puts "Тип: #{hdd_type} | Объем: #{hdd_capacity}"
+      puts "___________________________"
+    end
+    puts "\n\r"
+    puts "\n\r"
+    puts "-------------------------------------------"
+    puts "\n\r"
+    puts "\n\r"
   end
 
   def header
@@ -77,8 +86,7 @@ class Reporter
     puts "\n\r"
   end
 
-  def space_x_3
-    puts "\n\r"
+  def space_x_2
     puts "\n\r"
     puts "\n\r"
   end

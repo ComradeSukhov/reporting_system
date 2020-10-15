@@ -31,8 +31,14 @@ class VM
               end
 
     # Убираем из конфигураций hdd айдишник VM которому принадлежит hdd
-    hdd_arr.map do |hdd|
+    hdd_arr.map! do |hdd|
         hdd = [hdd[1], hdd[2]]
+    end
+
+    hdd_arr.map! do |hdd|
+      hdd_type     = hdd.select { |parametr| parametr.class == String }[0]
+      hdd_capacity = hdd.select { |parametr| parametr.class == Integer }[0]
+      { hdd_type: hdd_type, hdd_capacity: hdd_capacity }
     end
   end
 

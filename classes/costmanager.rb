@@ -42,8 +42,8 @@ class CostManager
 
   def clac_add_hdd(vm)
     add_hdd_cost = vm.addit_hdd.map do |hdd|
-                     hdd_type     = hdd.select { |parametr| parametr.class == String }[0]
-                     hdd_capacity = hdd.select { |parametr| parametr.class == Integer }[0]
+                     hdd_type     = hdd[:hdd_type]
+                     hdd_capacity = hdd[:hdd_capacity]
 
                      hdd_capacity * find_price(hdd_type)
                    end
