@@ -1,15 +1,18 @@
+# frozen_string_literal: true
+
 class Selecter
   attr_accessor :vm_arr
+
   def initialize(vm_arr = [])
     @vm_arr = vm_arr
   end
 
   def most_expensive(quantity = 1)
-    @vm_arr.max_by(quantity) { |vm| vm.cost }
+    @vm_arr.max_by(quantity, &:cost)
   end
 
   def cheapest(quantity = 1)
-    @vm_arr.min_by(quantity) { |vm| vm.cost }
+    @vm_arr.min_by(quantity, &:cost)
   end
 
   def most_voluminous_by_type(type, quantity = 1)
@@ -19,28 +22,26 @@ class Selecter
   end
 
   def most_add_hdd_by_quant(quantity = 1, type = nil)
-    if type == nil
+    if type.nil?
       @vm_arr.max_by(quantity) do |vm|
         vm.addit_hdd.size
       end
     else
       @vm_arr.max_by(quantity) do |vm|
         arr_of_hdd = vm.addit_hdd.select do |hdd|
-                       hdd_type     = hdd[:hdd_type]
-                       hdd_type == type
-                     end
+          hdd[:type] == type
+        end
         arr_of_hdd.size
       end
     end
   end
 
   def most_add_hdd_by_vol(quantity = 1, type = nil)
-    if type == nil
+    if type.nil?
       @vm_arr.max_by(quantity) do |vm|
         volum = 0
         vm.addit_hdd.each do |hdd|
-          hdd_capacity = hdd[:hdd_capacity]
-          volum += hdd_capacity
+          volum += hdd[:capacity]
         end
         volum
       end
@@ -48,10 +49,7 @@ class Selecter
       @vm_arr.max_by(quantity) do |vm|
         volum = 0
         vm.addit_hdd.select do |hdd|
-          hdd_type     = hdd[:hdd_type]
-          hdd_capacity = hdd[:hdd_capacity]
-
-          volum += hdd_capacity if hdd_type == type
+          volum += hdd[:capacity] if hdd[:type] == type
         end
         volum
       end
@@ -66,10 +64,7 @@ class Selecter
 
     # Добавляем объем дополнительных hdd VM если условие true
     vm.addit_hdd.each do |hdd|
-      hdd_type     = hdd[:hdd_type]
-      hdd_capacity = hdd[:hdd_capacity]
-
-      volum += hdd_capacity if hdd_type == type
+      volum += hdd[:capacity] if hdd[:type] == type
     end
     volum
   end

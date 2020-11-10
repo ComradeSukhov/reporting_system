@@ -1,45 +1,35 @@
+# frozen_string_literal: true
+
 class VM
-  attr_reader :id, :cpu, :ram, :hdd_type, :hdd_capacity, :addit_hdd, :cost
-  attr_writer :cost
+  attr_accessor :cost
+  attr_reader :id, :cpu, :ram, :hdd_type, :hdd_capacity, :addit_hdd
 
   def initialize(vm_conf, vol_confs = [])
-    @id           = vm_conf[0]
-    @cpu          = vm_conf[1]
-    @ram          = vm_conf[2]
-    @hdd_type     = vm_conf[3]
-    @hdd_capacity = vm_conf[4]
+    @id           = vm_conf[:id]
+    @cpu          = vm_conf[:cpu]
+    @ram          = vm_conf[:ram]
+    @hdd_type     = vm_conf[:hdd_type]
+    @hdd_capacity = vm_conf[:hdd_capacity]
     @addit_hdd    = vol_confs
     @cost         = nil
   end
 
   # Классовый метод который возвращает массив инстансов вычислительных машин
-  # Аргумент vm_confs ожидается в виде 2-мерного массива
-  def self.new_array(vm_confs, vol_confs = 0)
+  # Аргумент vm_confs ожидается в виде массива где настройки для каждой vm это хэш
+  def self.new_array(vm_confs, vol_confs = [])
     vm_confs.map do |vm_conf|
-      vm_id = vm_conf[0] 
+      vm_id = vm_conf[:id]
       VM.new(vm_conf, addit_hdd(vol_confs, vm_id))
     end
   end
 
-  # Классовый метод который возвращает 2-мерный массив где каждый элемент это конфигурация
-  # дополнительного hdd
-  # Аргумент vol_confs ожидается в виде 2-мерного массива.
+  private
+  
+  # Классовый метод который возвращает массив где каждый элемент это конфигурация
+  # дополнительного hdd в виже хэша
   def self.addit_hdd(vol_confs, vm_id)
-    hdd_arr = vol_confs.select do |vol_conf|
-                vol_conf_vm_id  = vol_conf[0]
-                vol_conf_vm_id == vm_id
-              end
-
-    # Убираем из конфигураций hdd айдишник VM которому принадлежит hdd
-    hdd_arr.map! do |hdd|
-        hdd = [hdd[1], hdd[2]]
-    end
-
-    hdd_arr.map! do |hdd|
-      hdd_type     = hdd.select { |parametr| parametr.class == String }[0]
-      hdd_capacity = hdd.select { |parametr| parametr.class == Integer }[0]
-      { hdd_type: hdd_type, hdd_capacity: hdd_capacity }
+    vol_confs.select do |vol_conf|
+      vol_conf[:id] == vm_id
     end
   end
-
 end

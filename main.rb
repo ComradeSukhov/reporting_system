@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'classes/csv_reader'
 require_relative 'classes/vm'
 require_relative 'classes/costmanager'
